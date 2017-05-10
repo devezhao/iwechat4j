@@ -16,4 +16,8 @@ public interface Message {
 	String getFromUserName();
 	
 	String getToUserName();
+	
+	boolean isFromGroup();
+	
+	boolean isFromMp();
 }

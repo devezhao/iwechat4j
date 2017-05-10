@@ -18,6 +18,10 @@ public class Text extends DefaultMessage {
 	}
 	
 	public String getContent() {
-		return getMessageRaw().getString("Content");
+		String c = getMessageRaw().getString("Content");
+		if (isFromGroup()) {
+			c = c.substring(c.indexOf("<br/>") + 5);
+		}
+		return c;
 	}
 }

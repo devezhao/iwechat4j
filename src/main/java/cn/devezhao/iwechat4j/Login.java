@@ -161,11 +161,14 @@ public class Login {
 		dataMap.put("BaseRequest", wechat.getSession().getBaseRequestParams());
 		String data = JSON.toJSONString(dataMap);
 		String rs = wechat.getHttpClient().post(url, data);
-		JSONObject rsJson = JSON.parseObject(rs);
+		BaseResponse bresp = new BaseResponse(rs);
+		if (!bresp.isSuccess()) {
+			throw new UnexpectedResultException(rs);
+		}
 		
-		JSONObject user = rsJson.getJSONObject("User");
+		JSONObject user = bresp.getRawResponse().getJSONObject("User");
 		wechat.getSession().setUserRaw(user);
-		JSONObject syncKey = rsJson.getJSONObject("SyncKey");
+		JSONObject syncKey = bresp.getRawResponse().getJSONObject("SyncKey");
 		wechat.getSession().setSyncKeyRaw(syncKey);
 		
 		// 3.
@@ -178,6 +181,10 @@ public class Login {
 		dataMap2.put("ToUserName", wechat.getSession().getUserName());
 		dataMap2.put("ClientMsgId", System.currentTimeMillis());
 		data = JSON.toJSONString(dataMap2);
-		wechat.getHttpClient().post(url, data);
+		rs = wechat.getHttpClient().post(url, data);
+		bresp = new BaseResponse(rs);
+		if (!bresp.isSuccess()) {
+			throw new UnexpectedResultException(rs);
+		}
 	}
 }

@@ -36,6 +36,18 @@ public class DefaultMessage implements Message {
 	}
 	
 	@Override
+	public boolean isFromGroup() {
+		// 群组标识有两个 @ 个人只有一个 @
+		return getFromUserName().startsWith("@@");
+	}
+	
+	@Override
+	public boolean isFromMp() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return getMessageRaw().toString();
 	}
