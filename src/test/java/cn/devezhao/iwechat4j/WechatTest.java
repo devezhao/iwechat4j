@@ -13,4 +13,5 @@ public class WechatTest {
 	public void testLogin() {
 		new Wechat().login();
 	}
+	
 }

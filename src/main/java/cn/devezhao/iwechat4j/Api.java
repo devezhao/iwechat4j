@@ -18,14 +18,14 @@ public interface Api {
 	/**
 	 * 启动消息监听
 	 */
-	void startListener();
+	void start();
 	
 	/**
-	 * 添加消息监听器
+	 * 添加消息/事件监听器
 	 * 
 	 * @param messageListener
 	 */
-	void addListener(Listener messageListener);
+	void addListener(Listener listener);
 	
 	/**
 	 * 发送消息
@@ -34,4 +34,11 @@ public interface Api {
 	 */
 	void sendMessage(Message message);
 	
+	/**
+	 * 添加好友
+	 * 
+	 * @param uin 微信ID/手机
+	 * @param verifyContent
+	 */
+	void addFriend(String uin, String verifyContent);
 }

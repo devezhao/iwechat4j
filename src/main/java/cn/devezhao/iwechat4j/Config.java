@@ -8,8 +8,9 @@ import java.io.File;
  */
 public class Config {
 	
-	public static final String VERSION = "1.0.0";
-	public static final String BASE_URL = "https://login.weixin.qq.com";
+	public static final String LOGIN_URL = "https://login.weixin.qq.com";
+	public static final String BASE_URL = "https://wx.qq.com/cgi-bin/mmwebwx-bin";
+	
 	public static final int TIMEOUT = 30;
 	public static final File QR_DIR = new File(System.getProperty("java.io.tmpdir"));
 	
