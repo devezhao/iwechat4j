@@ -13,7 +13,7 @@ public interface Message {
 	
 	JSONObject getMessageRaw();
 	
-	String getFromUser();
+	String getFromUserName();
 	
-	String getToUser();
+	String getToUserName();
 }

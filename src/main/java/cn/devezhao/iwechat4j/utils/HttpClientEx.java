@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -23,11 +24,14 @@ public class HttpClientEx {
 	private CloseableHttpClient httpClient;
 	
 	private String userAgent;
+	private int timeout;
 	
 	public HttpClientEx(int timeout, String userAgent) {
 		this.cookieStore = new BasicCookieStore();
 		this.httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+		
 		this.userAgent = userAgent;
+		this.timeout = timeout;
 	}
 	
 	public CookieStore getCookieStore() {
@@ -71,6 +75,10 @@ public class HttpClientEx {
 			post.setEntity(new StringEntity(data, "utf-8"));
 			post.setHeader("content-type", "application/json; charset=utf-8");
 		}
+		if (post.getConfig() == null) {
+			post.setConfig(RequestConfig.custom()
+					.setConnectTimeout(timeout).setSocketTimeout(timeout).build());
+		}
 		
 		try {
 			HttpResponse resp = execute(post);
@@ -86,6 +94,11 @@ public class HttpClientEx {
 	 */
 	public HttpResponse execute(HttpGet get) {
 		get.addHeader("user-agent", userAgent);
+		if (get.getConfig() == null) {
+			get.setConfig(RequestConfig.custom()
+					.setConnectTimeout(timeout).setSocketTimeout(timeout).build());
+		}
+		
 		try {
 			return httpClient.execute(get);
 		} catch (IOException e) {
@@ -99,6 +112,11 @@ public class HttpClientEx {
 	 */
 	public HttpResponse execute(HttpPost post) {
 		post.addHeader("user-agent", userAgent);
+		if (post.getConfig() == null) {
+			post.setConfig(RequestConfig.custom()
+					.setConnectTimeout(timeout).setSocketTimeout(timeout).build());
+		}
+		
 		try {
 			return httpClient.execute(post);
 		} catch (IOException e) {

@@ -1,10 +1,6 @@
 package cn.devezhao.iwechat4j;
 
-import cn.devezhao.iwechat4j.listener.DefaultListener;
-import cn.devezhao.iwechat4j.message.Message;
-import cn.devezhao.iwechat4j.message.MessageType;
-import cn.devezhao.iwechat4j.message.Picture;
-import cn.devezhao.iwechat4j.message.Text;
+import cn.devezhao.iwechat4j.utils.plugins.ParrotListener;
 
 /**
  * 
@@ -18,19 +14,6 @@ public class DEMO {
 		wechat.login();
 		wechat.start();
 		
-		wechat.addListener(new DefaultListener() {
-			@Override
-			public void handle(Message message) {
-				super.handle(message);
-				
-				if (MessageType.Text.equals(message.getType())) {
-					System.out.println("收到文本消息: " + new Text(message).getContent());
-				}
-				else if (MessageType.Picture.equals(message.getType())) {
-					System.out.println("收到图片消息: " + new Picture(message).getPicUrl());
-				}
-				
-			}
-		});
+		wechat.addListener(new ParrotListener());
 	}
 }

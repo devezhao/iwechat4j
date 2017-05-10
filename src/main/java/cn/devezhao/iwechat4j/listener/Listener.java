@@ -2,6 +2,7 @@ package cn.devezhao.iwechat4j.listener;
 
 import java.util.Observer;
 
+import cn.devezhao.iwechat4j.Wechat;
 import cn.devezhao.iwechat4j.message.Message;
 
 /**
@@ -11,5 +12,5 @@ import cn.devezhao.iwechat4j.message.Message;
  */
 public interface Listener extends Observer {
 	
-	void handle(Message message);
+	void handle(Wechat wechat, Message message);
 }

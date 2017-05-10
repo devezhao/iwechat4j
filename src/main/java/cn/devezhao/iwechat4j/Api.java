@@ -1,9 +1,10 @@
 package cn.devezhao.iwechat4j;
 
 import cn.devezhao.iwechat4j.listener.Listener;
-import cn.devezhao.iwechat4j.message.Message;
+import cn.devezhao.iwechat4j.message.Send;
 
 /**
+ * API of Wechat 
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017
@@ -33,7 +34,7 @@ public interface Api {
 	 * @param message
 	 * @return
 	 */
-	boolean sendMessage(Message message);
+	boolean sendMessage(Send message);
 	
 	/**
 	 * 添加好友

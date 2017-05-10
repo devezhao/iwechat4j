@@ -26,12 +26,12 @@ public class DefaultMessage implements Message {
 	}
 	
 	@Override
-	public String getFromUser() {
+	public String getFromUserName() {
 		return messageRaw.getString("FromUserName");
 	}
 	
 	@Override
-	public String getToUser() {
+	public String getToUserName() {
 		return messageRaw.getString("ToUserName");
 	}
 	

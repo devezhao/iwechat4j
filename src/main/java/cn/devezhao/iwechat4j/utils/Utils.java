@@ -8,6 +8,4 @@ package cn.devezhao.iwechat4j.utils;
 public class Utils {
 
 	
-	
-	
 }

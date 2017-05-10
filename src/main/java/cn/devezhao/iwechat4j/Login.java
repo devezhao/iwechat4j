@@ -90,7 +90,7 @@ public class Login {
 				try {
 					initWebSession(r);
 				} catch (DocumentException e) {
-					throw new UnexpectedResultException("无效返回数据: " + r);
+					throw new UnexpectedResultException(e);
 				}
 			}
 			return s;
@@ -138,7 +138,8 @@ public class Login {
 		}
 		
 		HttpGet get = new HttpGet(redirectUrl);
-		get.setConfig(RequestConfig.custom().setRedirectsEnabled(false).build());
+		get.setConfig(RequestConfig.custom().setRedirectsEnabled(false)
+				.setConnectTimeout(Config.TIMEOUT).setSocketTimeout(Config.TIMEOUT).build());
 		HttpResponse resp = wechat.getHttpClient().execute(get);
 		String respText = null;
 		try {

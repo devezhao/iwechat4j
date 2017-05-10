@@ -8,10 +8,7 @@ package cn.devezhao.iwechat4j.message;
  */
 public enum MessageType {
 	
-	Text(1, "Text"), Picture(3, "Picture"),
-	
-	// 事件
-	Event(9001, "Event"),
+	Text(1, "Text"), Image(3, "Image"),
 	
 	;
 	
@@ -40,7 +37,7 @@ public enum MessageType {
 		case 1:
 			return MessageType.Text;
 		case 3:
-			return MessageType.Picture;
+			return MessageType.Image;
 		default:
 			break;
 		}

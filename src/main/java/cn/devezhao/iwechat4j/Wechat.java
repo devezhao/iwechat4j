@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.devezhao.iwechat4j.listener.Listener;
 import cn.devezhao.iwechat4j.message.DefaultMessage;
-import cn.devezhao.iwechat4j.message.Message;
+import cn.devezhao.iwechat4j.message.Send;
 import cn.devezhao.iwechat4j.utils.HttpClientEx;
 
 /**
@@ -51,11 +51,11 @@ public class Wechat extends Observable implements Api {
 		return alive;
 	}
 	
-	protected Session getSession() {
+	public Session getSession() {
 		return session;
 	}
 	
-	protected HttpClientEx getHttpClient() {
+	public HttpClientEx getHttpClient() {
 		return httpClient;
 	}
 	
@@ -140,8 +140,8 @@ public class Wechat extends Observable implements Api {
 	}
 	
 	@Override
-	public boolean sendMessage(Message message) {
-		return false;
+	public boolean sendMessage(Send message) {
+		return message.send(this);
 	}
 	
 	@Override

@@ -9,17 +9,17 @@ import com.alibaba.fastjson.JSONObject;
  * @author zhaofang123@gmail.com
  * @since 05/10/2017
  */
-public class Picture extends DefaultMessage {
+public class Image extends DefaultMessage {
 	
-	public Picture(JSONObject message) {
+	public Image(JSONObject message) {
 		super(message);
 	}
 	
-	public Picture(Message message) {
+	public Image(Message message) {
 		super(message.getMessageRaw());
 	}
 	
-	public String getPicUrl() {
+	public String getImageUrl() {
 		String skey = getMessageRaw().getString("__skey");
 		String baseUrl = getMessageRaw().getString("__baseUrl");
 		String dlUrl = String.format("%s/webwxgetmsgimg?msgid=%s&skey=%s",
@@ -28,6 +28,7 @@ public class Picture extends DefaultMessage {
 	}
 	
 	public boolean download(File dest) {
+		// TODO 下载图片
 		return false;
 	}
 }
