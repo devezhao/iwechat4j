@@ -14,4 +14,10 @@ public class WechatTest {
 		new Wechat().login();
 	}
 	
+	@Test
+	public void testAddFriend() {
+		Wechat wechat = new Wechat();
+		wechat.login();
+		wechat.addFriend("devezhao2", "老赵加我");
+	}
 }

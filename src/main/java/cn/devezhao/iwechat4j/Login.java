@@ -77,7 +77,7 @@ public class Login {
 	 */
 	public int checkStatus() {
 		String url = String.format("%s/cgi-bin/mmwebwx-bin/login?loginicon=true&uuid=%s&tip=0&r=%d",
-				Config.LOGIN_URL, wechat.getSession().getUuid(), System.currentTimeMillis());
+				Config.LOGIN_URL, wechat.getSession().getAttr("uuid"), System.currentTimeMillis());
 		String r = wechat.getHttpClient().get(url);
 		
 		String regex = "window.code=(\\d+)";
@@ -156,27 +156,27 @@ public class Login {
 		
 		// 2.
 		String url = String.format("%s/webwxinit?&r=%d", Config.BASE_URL, System.currentTimeMillis());
-		Map<String, Map<String, String>> params = new HashMap<>();
-		params.put("BaseRequest", wechat.getSession().getBaseRequestParams());
-		String params2str = JSON.toJSONString(params);
-		String r2 = wechat.getHttpClient().post(url, params2str);
-		JSONObject r2Json = JSON.parseObject(r2);
+		Map<String, Map<String, String>> dataMap = new HashMap<>();
+		dataMap.put("BaseRequest", wechat.getSession().getBaseRequestParams());
+		String data = JSON.toJSONString(dataMap);
+		String rs = wechat.getHttpClient().post(url, data);
+		JSONObject rsJson = JSON.parseObject(rs);
 		
-		JSONObject user = r2Json.getJSONObject("User");
+		JSONObject user = rsJson.getJSONObject("User");
 		wechat.getSession().setUserRaw(user);
-		JSONObject syncKey = r2Json.getJSONObject("SyncKey");
+		JSONObject syncKey = rsJson.getJSONObject("SyncKey");
 		wechat.getSession().setSyncKeyRaw(syncKey);
 		
 		// 3.
 		url = String.format("%s/webwxstatusnotify?lang=zh_CN&pass_ticket=%s",
 				wechat.getSession().getBaseUrl(), wechat.getSession().getPassTicket());
-		Map<String, Object> params2 = new HashMap<>();
-		params2.put("BaseRequest", wechat.getSession().getBaseRequestParams());
-		params2.put("Code", 3);
-		params2.put("FromUserName", wechat.getSession().getUserName());
-		params2.put("ToUserName", wechat.getSession().getUserName());
-		params2.put("ClientMsgId", System.currentTimeMillis());
-		params2str = JSON.toJSONString(params2);
-		wechat.getHttpClient().post(url, params2str);
+		Map<String, Object> dataMap2 = new HashMap<>();
+		dataMap2.put("BaseRequest", wechat.getSession().getBaseRequestParams());
+		dataMap2.put("Code", 3);
+		dataMap2.put("FromUserName", wechat.getSession().getUserName());
+		dataMap2.put("ToUserName", wechat.getSession().getUserName());
+		dataMap2.put("ClientMsgId", System.currentTimeMillis());
+		data = JSON.toJSONString(dataMap2);
+		wechat.getHttpClient().post(url, data);
 	}
 }

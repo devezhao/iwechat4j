@@ -2,8 +2,10 @@ package cn.devezhao.iwechat4j;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
@@ -58,9 +60,9 @@ public class Wechat extends Observable implements Api {
 	}
 	
 	@Override
-	public void login() {
+	public boolean login() {
 		if (isAlive()) {
-			return;
+			return true;
 		}
 		
 		Login login = new Login(this);
@@ -85,6 +87,7 @@ public class Wechat extends Observable implements Api {
 				LOG.debug("检查登录状态: " + status);
 			}
 		}
+		return isAlive();
 	}
 	
 	@Override
@@ -117,7 +120,7 @@ public class Wechat extends Observable implements Api {
 							for (Object o : revMessages) {
 								JSONObject m = (JSONObject) o;
 								m.put("__skey", getSession().getAttr("skey"));
-								m.put("__baseUrl", getSession().getAttr("baseUrl"));
+								m.put("__baseUrl", getSession().getBaseUrl());
 								setChanged();
 								notifyObservers(new DefaultMessage(m));
 							}
@@ -137,11 +140,35 @@ public class Wechat extends Observable implements Api {
 	}
 	
 	@Override
-	public void sendMessage(Message message) {
+	public boolean sendMessage(Message message) {
+		return false;
 	}
 	
 	@Override
-	public void addFriend(String uin, String verifyContent) {
+	public boolean addFriend(String useruin, String verifyContent) {
+		String url = String.format("%s/webwxverifyuser?r=%d&pass_ticket=%s",
+				getSession().getBaseUrl(), System.currentTimeMillis(), getSession().getPassTicket());
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("BaseRequest", getSession().getBaseRequestParams());
+		dataMap.put("Opcode", 2);
+		dataMap.put("VerifyContent", verifyContent);
+		dataMap.put("SceneList", new int[] { 33 });
+		dataMap.put("SceneListCount", 1);
+		dataMap.put("skey", getSession().getSkey());
+		
+		List<Map<String, String>> users = new ArrayList<>();
+		Map<String, String> user = new HashMap<>();
+		user.put("Value", useruin);
+		user.put("VerifyUserTicket", "");
+		users.add(user);
+		dataMap.put("VerifyUserList", users);
+		dataMap.put("VerifyUserListSize", 1);
+		
+		String data = JSON.toJSONString(dataMap);
+		String rs = getHttpClient().post(url, data);
+		System.out.println(rs);
+		
+		return false;
 		// TODO Auto-generated method stub
 	}
 	

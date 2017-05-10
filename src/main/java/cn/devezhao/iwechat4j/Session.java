@@ -22,10 +22,6 @@ public class Session {
 	public Session() {
 		super();
 	}
-
-	public String getUuid() {
-		return getAttr("uuid");
-	}
 	
 	public String getPassTicket() {
 		return getAttr("pass_ticket");
@@ -33,6 +29,10 @@ public class Session {
 	
 	public String getBaseUrl() {
 		return getAttr("baseUrl");
+	}
+	
+	public String getSkey() {
+		return getAttr("skey");
 	}
 	
 	public void addAttr(String key, String value) {

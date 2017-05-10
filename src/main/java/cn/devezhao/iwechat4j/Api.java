@@ -13,7 +13,7 @@ public interface Api {
 	/**
 	 * 扫码登录
 	 */
-	void login();
+	boolean login();
 	
 	/**
 	 * 启动消息监听
@@ -31,14 +31,16 @@ public interface Api {
 	 * 发送消息
 	 * 
 	 * @param message
+	 * @return
 	 */
-	void sendMessage(Message message);
+	boolean sendMessage(Message message);
 	
 	/**
 	 * 添加好友
 	 * 
-	 * @param uin 微信ID/手机
+	 * @param useruin 微信ID/手机/UUID
 	 * @param verifyContent
+	 * @return
 	 */
-	void addFriend(String uin, String verifyContent);
+	boolean addFriend(String useruin, String verifyContent);
 }

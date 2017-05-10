@@ -63,3 +63,5 @@ $RECYCLE.BIN/
 *.lnk
 /target/
 /a.json
+/.pydevproject
+/test.py
