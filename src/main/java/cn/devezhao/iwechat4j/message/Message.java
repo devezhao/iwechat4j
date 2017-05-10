@@ -1,5 +1,7 @@
 package cn.devezhao.iwechat4j.message;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 
  * @author zhaofang123@gmail.com
@@ -7,5 +9,11 @@ package cn.devezhao.iwechat4j.message;
  */
 public interface Message {
 
-	MessageType geType();
+	MessageType getType();
+	
+	JSONObject getMessageRaw();
+	
+	String getFromUser();
+	
+	String getToUser();
 }

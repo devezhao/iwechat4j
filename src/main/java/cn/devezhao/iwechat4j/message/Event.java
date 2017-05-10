@@ -8,8 +8,8 @@ package cn.devezhao.iwechat4j.message;
 public abstract class Event implements Message {
 
 	@Override
-	public MessageType geType() {
-		return null;
+	public MessageType getType() {
+		return MessageType.Event;
 	}
 	
 	/**

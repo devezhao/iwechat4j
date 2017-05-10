@@ -16,12 +16,23 @@ public class DefaultMessage implements Message {
 	}
 	
 	@Override
-	public MessageType geType() {
+	public MessageType getType() {
 		return MessageType.forNumber(messageRaw.getIntValue("MsgType"));
 	}
 	
+	@Override
 	public JSONObject getMessageRaw() {
 		return messageRaw;
+	}
+	
+	@Override
+	public String getFromUser() {
+		return messageRaw.getString("FromUserName");
+	}
+	
+	@Override
+	public String getToUser() {
+		return messageRaw.getString("ToUserName");
 	}
 	
 	@Override

@@ -8,18 +8,19 @@ package cn.devezhao.iwechat4j.message;
  */
 public enum MessageType {
 	
-	Text(1, "Text", "文本"), Picture(1, "Picture", "图片"),
+	Text(1, "Text"), Picture(3, "Picture"),
+	
+	// 事件
+	Event(9001, "Event"),
 	
 	;
 	
 	private int number;
 	private String name;
-	private String description;
 	
-	MessageType(int number, String name, String description) {
+	MessageType(int number, String name) {
 		this.number = number;
 		this.name = name;
-		this.description = description;
 	}
 
 	public int getNumber() {
@@ -28,10 +29,6 @@ public enum MessageType {
 
 	public String getName() {
 		return name;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 	
 	/**
@@ -42,7 +39,7 @@ public enum MessageType {
 		switch (msgType) {
 		case 1:
 			return MessageType.Text;
-		case 2:
+		case 3:
 			return MessageType.Picture;
 		default:
 			break;

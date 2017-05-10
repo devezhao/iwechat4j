@@ -115,9 +115,11 @@ public class Wechat extends Observable implements Api {
 						try {
 							JSONArray revMessages = revMessages();
 							for (Object o : revMessages) {
-								Message m = new DefaultMessage((JSONObject) o);
+								JSONObject m = (JSONObject) o;
+								m.put("__skey", getSession().getAttr("skey"));
+								m.put("__baseUrl", getSession().getAttr("baseUrl"));
 								setChanged();
-								notifyObservers(m);
+								notifyObservers(new DefaultMessage(m));
 							}
 						} catch (Exception ex) {
 							LOG.error("接收消息失败", ex);
