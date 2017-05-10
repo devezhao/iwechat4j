@@ -81,8 +81,12 @@ public class Session {
 		return userRaw.getString("UserName");
 	}
 	
-	public String getUserNick() {
-		return userRaw.getString("UserNick");
+	public String getNickName() {
+		return userRaw.getString("NickName");
+	}
+	
+	public String getHeadimgUrl() {
+		return "https://wx.qq.com" + userRaw.getString("HeadImgUrl");
 	}
 	 
 	@Override

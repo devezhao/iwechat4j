@@ -67,7 +67,7 @@ public class Wechat extends Observable implements Api {
 		
 		Login login = new Login(this);
 		File qr = login.getLoginQR();
-		LOG.info("请扫描二维码登录: " + qr);
+		LOG.info("请扫描登录二维码 ... " + qr);
 		try {
 			Runtime.getRuntime().exec("cmd /c start " + qr.getAbsolutePath());
 		} catch (Exception e) { }
@@ -81,7 +81,7 @@ public class Wechat extends Observable implements Api {
 			int status = login.checkStatus();
 			if (status == 200) {
 				alive = true;
-				LOG.info("登录成功: " + session);
+				LOG.info("登录成功 ... Hello " + session.getNickName());
 				break;
 			} else {
 				LOG.debug("检查登录状态: " + status);
@@ -132,6 +132,7 @@ public class Wechat extends Observable implements Api {
 			}
 		});
 		t.start();
+		LOG.info("开始监听/接收消息 ...");
 	}
 	
 	@Override

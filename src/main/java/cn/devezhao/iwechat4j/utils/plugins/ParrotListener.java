@@ -15,7 +15,8 @@ public class ParrotListener extends DefaultListener {
 
 	@Override
 	public void handleText(Wechat wechat, Text message) {
-		TextSend ts = new TextSend(message.getContent(), message.getFromUserName());
+		TextSend ts = new TextSend(
+				message.getContent().replace("<br/>", "\n"), message.getFromUserName());
 		wechat.sendMessage(ts);
 	}
 	
