@@ -25,6 +25,7 @@ import cn.devezhao.iwechat4j.message.Send;
 import cn.devezhao.iwechat4j.utils.HttpClientEx;
 
 /**
+ * 核心类
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017
@@ -119,8 +120,6 @@ public class Wechat extends Observable implements Api {
 							JSONArray revMessages = revMessages();
 							for (Object o : revMessages) {
 								JSONObject m = (JSONObject) o;
-								m.put("__skey", getSession().getAttr("skey"));
-								m.put("__baseUrl", getSession().getBaseUrl());
 								setChanged();
 								notifyObservers(new DefaultMessage(m));
 							}

@@ -12,7 +12,8 @@ public enum MessageType {
 	
 	;
 	
-	private int number;
+	
+	private int number;  // 号码与微信协议对应
 	private String name;
 	
 	MessageType(int number, String name) {

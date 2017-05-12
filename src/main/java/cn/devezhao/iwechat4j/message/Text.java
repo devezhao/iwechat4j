@@ -14,7 +14,7 @@ public class Text extends DefaultMessage {
 	}
 	
 	public Text(Message message) {
-		super(message.getMessageRaw());
+		super(message);
 	}
 	
 	public String getContent() {

@@ -6,6 +6,7 @@ import cn.devezhao.iwechat4j.Wechat;
 import cn.devezhao.iwechat4j.message.Message;
 
 /**
+ * 消息监听
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017

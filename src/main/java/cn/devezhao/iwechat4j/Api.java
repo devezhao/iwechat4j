@@ -4,7 +4,7 @@ import cn.devezhao.iwechat4j.listener.Listener;
 import cn.devezhao.iwechat4j.message.Send;
 
 /**
- * API of Wechat 
+ * API of Wechat
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017

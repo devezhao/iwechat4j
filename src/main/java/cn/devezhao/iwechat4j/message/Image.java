@@ -4,6 +4,9 @@ import java.io.File;
 
 import com.alibaba.fastjson.JSONObject;
 
+import cn.devezhao.iwechat4j.Wechat;
+import cn.devezhao.iwechat4j.utils.Utils;
+
 /**
  * 
  * @author zhaofang123@gmail.com
@@ -16,19 +19,30 @@ public class Image extends DefaultMessage {
 	}
 	
 	public Image(Message message) {
-		super(message.getMessageRaw());
+		super(message);
 	}
 	
-	public String getImageUrl() {
-		String skey = getMessageRaw().getString("__skey");
-		String baseUrl = getMessageRaw().getString("__baseUrl");
+	/**
+	 * 获取下载链接（此链接仅限当前会话可访问）
+	 * 
+	 * @param wechat
+	 * @return
+	 */
+	public String getImageUrl(Wechat wechat) {
 		String dlUrl = String.format("%s/webwxgetmsgimg?msgid=%s&skey=%s",
-				baseUrl, getMessageRaw().getString("NewMsgId"), skey);
+				wechat.getSession().getBaseUrl(), getMessageRaw().getString("NewMsgId"), wechat.getSession().getSkey());
 		return dlUrl;
 	}
 	
-	public boolean download(File dest) {
-		// TODO 下载图片
-		return false;
+	/**
+	 * 下载文件
+	 * 
+	 * @param wechat
+	 * @param dest
+	 * @return
+	 */
+	public boolean download(Wechat wechat, File dest) {
+		String dlUrl = getImageUrl(wechat);
+		return Utils.downloadFile(wechat.getHttpClient(), dest, dlUrl);
 	}
 }

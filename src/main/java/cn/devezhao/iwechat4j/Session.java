@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 会话数据
+ * 存储会话数据
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017

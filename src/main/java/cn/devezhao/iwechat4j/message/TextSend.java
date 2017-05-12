@@ -15,12 +15,16 @@ import cn.devezhao.iwechat4j.Wechat;
  */
 public class TextSend implements Send {
 	
-	private String content;
 	private String toUserName;
+	private String content;
 	
-	public TextSend(String content, String toUserName) {
-		this.content = content;
+	/**
+	 * @param toUserName
+	 * @param content
+	 */
+	public TextSend(String toUserName, String content) {
 		this.toUserName = toUserName;
+		this.content = content;
 	}
 
 	@Override

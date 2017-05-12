@@ -3,6 +3,7 @@ package cn.devezhao.iwechat4j.message;
 import com.alibaba.fastjson.JSONObject;
 
 /**
+ * 基础消息类
  * 
  * @author zhaofang123@gmail.com
  * @since 05/10/2017
@@ -13,6 +14,10 @@ public class DefaultMessage implements Message {
 	
 	public DefaultMessage(JSONObject messageRaw) {
 		this.messageRaw = messageRaw;
+	}
+	
+	public DefaultMessage(Message message) {
+		this.messageRaw = message.getMessageRaw();
 	}
 	
 	@Override

@@ -1,9 +1,7 @@
 package cn.devezhao.iwechat4j;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.devezhao.iwechat4j.utils.UnexpectedResultException;
+import cn.devezhao.iwechat4j.utils.Utils;
 
 /**
  * 登录及初始化基础数据
@@ -46,28 +45,16 @@ public class Login {
 	public File getLoginQR() {
 		String uuid = getQrUuid();
 		wechat.getSession().addAttr("uuid", uuid);
-		
 		String url = String.format("%s/qrcode/%s", Config.LOGIN_URL, uuid);
-		byte bs[] = wechat.getHttpClient().readByte(url);
 		
-		File qr = new File(Config.QR_DIR, "iwechat4j");
+		File qr = new File(Config.DATA_DIR, "iwechat4j/qr");
 		if (!qr.exists()) {
 			qr.mkdirs();
 		}
 		qr = new File(qr, System.currentTimeMillis() + ".jpg");
-		OutputStream os = null;
-		try {
-			os = new FileOutputStream(qr);
-			os.write(bs);
-			os.flush();
-			return qr;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				os.close();
-			} catch (Exception ex) { }
-		}
+		
+		Utils.downloadFile(wechat.getHttpClient(), qr, url);
+		return qr;
 	}
 	
 	/**
