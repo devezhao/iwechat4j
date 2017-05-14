@@ -1,12 +1,14 @@
 package cn.devezhao.iwechat4j.utils;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -34,8 +36,29 @@ public class HttpClientEx {
 		this.timeout = timeout;
 	}
 	
+	/**
+	 * 获取 <tt>CookieStore</tt>
+	 * 
+	 * @return
+	 */
 	public CookieStore getCookieStore() {
 		return cookieStore;
+	}
+	
+	/**
+	 * 读取 COOKIE 值
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public String readCookie(String key) {
+		List<Cookie> cookies = getCookieStore().getCookies();
+		for (Cookie c : cookies) {
+			if (key.equalsIgnoreCase(c.getName())) {
+				return c.getValue();
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -69,7 +92,7 @@ public class HttpClientEx {
 	 * @param data
 	 * @return
 	 */
-	public String post(String url, String data) {
+	public String postJson(String url, String data) {
 		HttpPost post = new HttpPost(url);
 		if (data != null) {
 			post.setEntity(new StringEntity(data, "utf-8"));

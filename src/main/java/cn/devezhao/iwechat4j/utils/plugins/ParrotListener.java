@@ -29,6 +29,9 @@ public class ParrotListener extends DefaultListener {
 	public void handleImage(Wechat wechat, Image message) {
 		super.handleImage(wechat, message);
 		File dest = new File(Config.DATA_DIR, "iwechat4j/image/" + System.currentTimeMillis() + ".jpg");
+		if (!dest.getParentFile().exists()) {
+			dest.getParentFile().mkdirs();
+		}
 		message.download(wechat, dest);
 		
 		ImageSend is = new ImageSend(message.getFromUserName(), dest);

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -69,9 +70,11 @@ public class Wechat extends Observable implements Api {
 		Login login = new Login(this);
 		File qr = login.getLoginQR();
 		LOG.info("请扫描登录二维码 ... " + qr);
-		try {
-			Runtime.getRuntime().exec("cmd /c start " + qr.getAbsolutePath());
-		} catch (Exception e) { }
+		if (SystemUtils.IS_OS_WINDOWS) {
+			try {
+				Runtime.getRuntime().exec("cmd /c start " + qr.getAbsolutePath());
+			} catch (Exception e) { }
+		}
 		for (int i = 0; i < 10; i++) {
 			try {
 				TimeUnit.MILLISECONDS.sleep(1000);
@@ -149,7 +152,7 @@ public class Wechat extends Observable implements Api {
 		String url = String.format("%s/webwxverifyuser?r=%d&pass_ticket=%s",
 				getSession().getBaseUrl(), System.currentTimeMillis(), getSession().getPassTicket());
 		Map<String, Object> dataMap = new HashMap<>();
-		dataMap.put("BaseRequest", getSession().getBaseRequestParams());
+		dataMap.put("BaseRequest", getSession().getBaseRequest());
 		dataMap.put("Opcode", 2);
 		dataMap.put("VerifyContent", verifyContent);
 		dataMap.put("SceneList", new int[] { 33 });
@@ -165,7 +168,7 @@ public class Wechat extends Observable implements Api {
 		dataMap.put("VerifyUserListSize", 1);
 		
 		String data = JSON.toJSONString(dataMap);
-		String rs = getHttpClient().post(url, data);
+		String rs = getHttpClient().postJson(url, data);
 		System.out.println(rs);
 		
 		return false;
@@ -212,12 +215,12 @@ public class Wechat extends Observable implements Api {
 				getSession().getAttr("skey"), getSession().getPassTicket());
 		
 		Map<String, Object> params = new HashMap<>();
-		params.put("BaseRequest", getSession().getBaseRequestParams());
+		params.put("BaseRequest", getSession().getBaseRequest());
 		params.put("SyncKey", getSession().getSyncKeyRaw());
 		params.put("rr", -new Date().getTime() / 1000);
 		
 		String data = JSON.toJSONString(params);
-		String r = httpClient.post(url, data);
+		String r = httpClient.postJson(url, data);
 		JSONObject rJson = JSON.parseObject(r);
 		
 		JSONObject syncKey = rJson.getJSONObject("SyncCheckKey");

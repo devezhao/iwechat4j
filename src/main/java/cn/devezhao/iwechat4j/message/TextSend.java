@@ -31,7 +31,7 @@ public class TextSend implements Send {
 	public boolean send(Wechat wechat) {
 		String url = String.format("%s/webwxsendmsg", wechat.getSession().getBaseUrl());
 		Map<String, Object> dataMap = new HashMap<>();
-		dataMap.put("BaseRequest", wechat.getSession().getBaseRequestParams());
+		dataMap.put("BaseRequest", wechat.getSession().getBaseRequest());
 		dataMap.put("Scene", 0);
 		
 		Map<String, Object> msg = new HashMap<>();
@@ -44,7 +44,7 @@ public class TextSend implements Send {
 		dataMap.put("Msg", msg);
 		
 		String data = JSON.toJSONString(dataMap);
-		String rs = wechat.getHttpClient().post(url, data);
+		String rs = wechat.getHttpClient().postJson(url, data);
 		BaseResponse bresp = new BaseResponse(rs);
 		return bresp.isSuccess();
 	}

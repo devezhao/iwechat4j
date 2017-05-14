@@ -1,5 +1,6 @@
 package cn.devezhao.iwechat4j;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,8 @@ import com.alibaba.fastjson.JSONObject;
  * @author zhaofang123@gmail.com
  * @since 05/10/2017
  */
-public class Session {
+public class Session implements Serializable {
+	private static final long serialVersionUID = -5587718224531686817L;
 
 	private Map<String, String> data = new HashMap<String, String>();
 	
@@ -23,18 +25,6 @@ public class Session {
 		super();
 	}
 	
-	public String getPassTicket() {
-		return getAttr("pass_ticket");
-	}
-	
-	public String getBaseUrl() {
-		return getAttr("baseUrl");
-	}
-	
-	public String getSkey() {
-		return getAttr("skey");
-	}
-	
 	public void addAttr(String key, String value) {
 		data.put(key, value);
 	}
@@ -43,7 +33,24 @@ public class Session {
 		return data.get(key);
 	}
 	
-	public Map<String, String> getBaseRequestParams() {
+	public String getPassTicket() {
+		return getAttr("pass_ticket");
+	}
+	
+	public String getBaseUrl() {
+		return getAttr("baseUrl");
+	}
+	
+	public String getUploadUrl() {
+		// TODO 文件上传 URL
+		return "https://file.wx.qq.com/cgi-bin/mmwebwx-bin";
+	}
+	
+	public String getSkey() {
+		return getAttr("skey");
+	}
+	
+	public Map<String, String> getBaseRequest() {
 		Map<String, String> map = new HashMap<>();
 		map.put("Skey", getAttr("skey"));
 		map.put("Sid", getAttr("wxsid"));
@@ -88,7 +95,7 @@ public class Session {
 	public String getHeadimgUrl() {
 		return "https://wx.qq.com" + userRaw.getString("HeadImgUrl");
 	}
-	 
+	
 	@Override
 	public String toString() {
 		return super.toString() + "#" + data.toString();

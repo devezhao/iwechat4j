@@ -145,9 +145,9 @@ public class Login {
 		// 2.
 		String url = String.format("%s/webwxinit?&r=%d", Config.BASE_URL, System.currentTimeMillis());
 		Map<String, Map<String, String>> dataMap = new HashMap<>();
-		dataMap.put("BaseRequest", wechat.getSession().getBaseRequestParams());
+		dataMap.put("BaseRequest", wechat.getSession().getBaseRequest());
 		String data = JSON.toJSONString(dataMap);
-		String rs = wechat.getHttpClient().post(url, data);
+		String rs = wechat.getHttpClient().postJson(url, data);
 		BaseResponse bresp = new BaseResponse(rs);
 		if (!bresp.isSuccess()) {
 			throw new UnexpectedResultException(rs);
@@ -162,13 +162,13 @@ public class Login {
 		url = String.format("%s/webwxstatusnotify?lang=zh_CN&pass_ticket=%s",
 				wechat.getSession().getBaseUrl(), wechat.getSession().getPassTicket());
 		Map<String, Object> dataMap2 = new HashMap<>();
-		dataMap2.put("BaseRequest", wechat.getSession().getBaseRequestParams());
+		dataMap2.put("BaseRequest", wechat.getSession().getBaseRequest());
 		dataMap2.put("Code", 3);
 		dataMap2.put("FromUserName", wechat.getSession().getUserName());
 		dataMap2.put("ToUserName", wechat.getSession().getUserName());
 		dataMap2.put("ClientMsgId", System.currentTimeMillis());
 		data = JSON.toJSONString(dataMap2);
-		rs = wechat.getHttpClient().post(url, data);
+		rs = wechat.getHttpClient().postJson(url, data);
 		bresp = new BaseResponse(rs);
 		if (!bresp.isSuccess()) {
 			throw new UnexpectedResultException(rs);
