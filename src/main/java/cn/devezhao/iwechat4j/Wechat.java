@@ -42,6 +42,8 @@ public class Wechat extends Observable implements Api {
 	private HttpClientEx httpClient;
 	
 	private Session session;
+	private Contacts contacts;
+	
 	private boolean alive;
 	
 	public Wechat() {
@@ -59,6 +61,10 @@ public class Wechat extends Observable implements Api {
 	
 	public HttpClientEx getHttpClient() {
 		return httpClient;
+	}
+	
+	public Contacts getContacts() {
+		return contacts;
 	}
 	
 	@Override
@@ -91,6 +97,10 @@ public class Wechat extends Observable implements Api {
 				LOG.debug("检查登录状态: " + status);
 			}
 		}
+		
+		contacts = new Contacts(this);
+		contacts.store();
+		
 		return isAlive();
 	}
 	

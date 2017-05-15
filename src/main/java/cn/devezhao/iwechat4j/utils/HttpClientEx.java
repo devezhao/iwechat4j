@@ -68,7 +68,7 @@ public class HttpClientEx {
 	public String get(String url) {
 		try {
 			HttpResponse resp = execute(new HttpGet(url));
-			return EntityUtils.toString(resp.getEntity());
+			return EntityUtils.toString(resp.getEntity(), "utf-8");
 		} catch (Exception e) {
 			throw new ExecuteHttpMethodException("执行 GET 错误: " + url, e);
 		}
