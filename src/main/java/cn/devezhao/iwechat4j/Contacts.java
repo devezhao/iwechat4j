@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -18,13 +19,6 @@ import com.alibaba.fastjson.JSONObject;
  * @since 05/15/2017
  */
 public class Contacts {
-	
-	/** 公众号 */
-	public static final int TYPE_MP = 3;
-	/** 群组     */
-	public static final int TYPE_GROUP = 2;
-	/** 好友     */
-	public static final int TYPE_FRIEND = 1;
 	
 	private static final Log LOG = LogFactory.getLog(Contacts.class);
 	
@@ -41,19 +35,51 @@ public class Contacts {
 	protected void store() {
 		String url = String.format("%s/webwxgetcontact?pass_ticket=%s&skey=%s&r=%d",
 				wechat.getSession().getBaseUrl(), wechat.getSession().getPassTicket(), wechat.getSession().getSkey(), System.currentTimeMillis());
-		String r = wechat.getHttpClient().get(url);
-		BaseResponse bresp = new BaseResponse(r);
+		String rs = wechat.getHttpClient().get(url);
+		BaseResponse bresp = new BaseResponse(rs);
 		if (!bresp.isSuccess()) {
 			LOG.error("加载联系人列表失败: " + bresp.getErrorMsg());
 			return;
 		}
 		
-		JSONObject rJson = bresp.getRawResponse();
+		JSONObject rJson = bresp.getResponse();
 		JSONArray memberList = rJson.getJSONArray("MemberList");
 		for (Object o : memberList) {
 			Member member = new Member((JSONObject) o);
 			members.put(member.getUserName(), member);
 		}
+		
+		// 加载群组成员
+		Set<Map<String, String>> groups = new HashSet<>();
+		for (Member group : getGroupMembers()) {
+			Map<String, String> map = new HashMap<>(2);
+			map.put("UserName", group.getUserName());
+			map.put("EncryChatRoomId", group.getRaw().getString("EncryChatRoomId"));
+			groups.add(map);
+		}
+		
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("BaseRequest", wechat.getSession().getBaseRequest());
+		dataMap.put("Count", groups.size());
+		dataMap.put("List", groups);
+		String data = JSON.toJSONString(dataMap);
+		url = String.format("%s/webwxbatchgetcontact?type=ex&r=%d", wechat.getSession().getBaseUrl(), System.currentTimeMillis());
+		rs = wechat.getHttpClient().postJson(url, data);
+		bresp = new BaseResponse(rs);
+		
+		JSONArray ContactList = bresp.getResponse().getJSONArray("ContactList");
+		for (Object o : ContactList) {
+			JSONObject jo = (JSONObject) o;
+			String groupName = jo.getString("UserName");
+			JSONArray MemberList = jo.getJSONArray("MemberList");
+			Set<String> groupMembers = new HashSet<>();
+			for (Object o2 : MemberList) {
+				JSONObject jo2 = (JSONObject) o2;
+				groupMembers.add(jo2.getString("UserName"));
+			}
+			getMember(groupName).setMemberList(groupMembers);
+		}
+		
 		LOG.info("成功加载 " + members.size() + " 个联系人（好友/群组/公众号）列表");
 	}
 	
@@ -89,7 +115,7 @@ public class Contacts {
 	 * @return
 	 */
 	public Set<Member> getMpMembers() {
-		return getSpecMembers(TYPE_MP);
+		return getMembersByType(Member.TYPE_MP);
 	}
 	
 	/**
@@ -98,7 +124,7 @@ public class Contacts {
 	 * @return
 	 */
 	public Set<Member> getGroupMembers() {
-		return getSpecMembers(TYPE_GROUP);
+		return getMembersByType(Member.TYPE_GROUP);
 	}
 	
 	/**
@@ -107,105 +133,22 @@ public class Contacts {
 	 * @return
 	 */
 	public Set<Member> getFriendMembers() {
-		return getSpecMembers(TYPE_FRIEND);
+		return getMembersByType(Member.TYPE_FRIEND);
 	}
 	
 	/**
 	 * 获取指定类型成员
 	 * 
-	 * @param specType
+	 * @param memberType
 	 * @return
 	 */
-	private Set<Member> getSpecMembers(int specType) {
+	private Set<Member> getMembersByType(int memberType) {
 		Set<Member> set = new HashSet<>();
 		for (Member member : members.values()) {
-			if (member.getType() == specType) {
+			if (member.getType() == memberType) {
 				set.add(member);
 			}
 		}
 		return set;
-	}
-	
-	/**
-	 * 联系人
-	 */
-	public static class Member {
-		private JSONObject raw;
-		private String userName;
-		private String nickName;
-		private String signature;
-		private String headimgUrl;
-		private int type = TYPE_FRIEND;
-		
-		Member(JSONObject raw) {
-			this.raw = raw;
-			this.userName = raw.getString("UserName");
-			this.nickName = raw.getString("NickName");
-			this.signature = raw.getString("Signature");
-			this.headimgUrl = raw.getString("HeadImgUrl");
-			
-			int verifyFlag = raw.getIntValue("VerifyFlag");
-			if (verifyFlag > 0 && verifyFlag % 8 == 0) {
-				this.type = TYPE_MP;
-			} else if (this.userName.startsWith("@@")) {
-				this.type = TYPE_GROUP;
-			}
-		}
-		
-		/**
-		 * 获取成员标识
-		 * @return
-		 */
-		public String getUserName() {
-			return userName;
-		}
-		
-		/**
-		 * 获取昵称（如昵称为空，则“可能”表示此账号有问题）
-		 * @return
-		 */
-		public String getNickName() {
-			return nickName;
-		}
-		
-		/**
-		 * 获取签名
-		 * @return
-		 */
-		public String getSignature() {
-			return signature;
-		}
-		
-		/**
-		 * 获取头像（URL）
-		 * @return
-		 */
-		public String getHeadimgUrl() {
-			return headimgUrl;
-		}
-		
-		/**
-		 * 联系人类型
-		 * @return
-		 * @see Contacts#TYPE_FRIEND
-		 * @see Contacts#TYPE_GROUP
-		 * @see Contacts#TYPE_MP
-		 */
-		public int getType() {
-			return type;
-		}
-		
-		/**
-		 * 获取原始数据对象
-		 * @return
-		 */
-		public JSONObject getRaw() {
-			return raw;
-		}
-		
-		@Override
-		public String toString() {
-			return raw.toJSONString();
-		}
 	}
 }

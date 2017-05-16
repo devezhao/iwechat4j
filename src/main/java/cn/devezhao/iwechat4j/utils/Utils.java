@@ -120,7 +120,7 @@ public class Utils {
 		
 		BaseResponse resp = new BaseResponse(rs);
 		if (resp.isSuccess()) {
-			return resp.getRawResponse().getString("MediaId");
+			return resp.getResponse().getString("MediaId");
 		}
 		return null;
 	}

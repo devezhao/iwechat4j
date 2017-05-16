@@ -153,10 +153,11 @@ public class Login {
 			throw new UnexpectedResultException(rs);
 		}
 		
-		JSONObject user = bresp.getRawResponse().getJSONObject("User");
+		JSONObject user = bresp.getResponse().getJSONObject("User");
 		wechat.getSession().setUserRaw(user);
-		JSONObject syncKey = bresp.getRawResponse().getJSONObject("SyncKey");
+		JSONObject syncKey = bresp.getResponse().getJSONObject("SyncKey");
 		wechat.getSession().setSyncKeyRaw(syncKey);
+		// ContactList -> 最近联系人
 		
 		// 3.
 		url = String.format("%s/webwxstatusnotify?lang=zh_CN&pass_ticket=%s",

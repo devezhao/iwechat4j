@@ -2,8 +2,6 @@ package cn.devezhao.iwechat4j;
 
 import org.junit.Test;
 
-import cn.devezhao.iwechat4j.Contacts.Member;
-
 /**
  * 
  * @author zhaofang123@gmail.com
@@ -25,6 +23,7 @@ public class ContactsTest {
 		System.out.println("-- 群组 ---------------");
 		for (Member m : contacts.getGroupMembers()) {
 			System.out.println(" |- " + m.getNickName());
+			System.out.println(" --|- " + m.getMemberList());
 		}
 		
 		System.out.println("-- 好友 ---------------");

@@ -17,7 +17,7 @@ public class BaseResponse {
 		this.rawResponse = JSON.parseObject(response);
 	}
 	
-	public JSONObject getRawResponse() {
+	public JSONObject getResponse() {
 		return rawResponse;
 	}
 	
